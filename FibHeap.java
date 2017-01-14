@@ -197,7 +197,7 @@ public class FibHeap {
 			while (nodes[d] != null) {
 
 				Node y = nodes[d];
-				if (heap.value > y.value) {
+				if (evalNode.value > y.value) {
 					Node temp = evalNode;
 					evalNode = y;
 					y = temp;
@@ -225,7 +225,7 @@ public class FibHeap {
 					this.heap.next = nodes[i];
 					nodes[i].next.prev = nodes[i];
 
-					if (nodes[i].value < heap.value) {
+					if (nodes[i].value < this.heap.value) {
 						this.heap = nodes[i];
 					}
 				}
@@ -235,9 +235,8 @@ public class FibHeap {
 	}
 
 	private void link(Node n1, Node n2) {
-		n1.prev.next = n1.next;
 		n1.next.prev = n1.prev;
-		
+		n1.prev.next = n1.next;
 		n1.parent = n2;
 		if (n2.child == null) {
 			n2.child = n1;
@@ -253,15 +252,19 @@ public class FibHeap {
 		n1.marked = false;
 	}
 
+	public String toString(){
+		return heap.toString();
+	}
+
 	public static void main(String[] args) {
 		FibHeap heap = new FibHeap();
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 2000; i++) {
 			heap.insert(new Node(i));
 		}
+		Node node20 = new Node(20);
+		heap.insert(node20);
 
 		heap.extactMin();
-
-		// heap.decreaseKey(nod7, 2);
 
 		System.out.println(heap.toString());
 	}
