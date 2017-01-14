@@ -1,5 +1,8 @@
 package fibonacciHeap;
 
+import java.util.HashMap;
+import java.util.Stack;
+
 public class FibHeap {
 
 	Node heap;
@@ -59,7 +62,32 @@ public class FibHeap {
 		}
 
 		public String toString() {
-			return value + "";
+			int lvl = 0;
+
+			return this._toString(lvl);
+		}
+
+		private String _toString(int lvl) {
+			Node act = this;
+			String out = "";
+			String separator = "|";
+			for (int i = 0; i < lvl; i++) {
+				separator += "    |";
+			}
+
+			do {
+				out += ((lvl != 0) ? separator : "") + ((lvl != 0) ? "----" : "") + act.value + "\n"
+						+ ((act.child != null) ? act.child._toString(lvl + 1) : "");
+				act = act.next;
+			} while (act != this);
+
+			/*
+			 * do{ out += act.value + (lvl + "") + "\n" + separator; out += "\n"
+			 * + offset + ""+ "|\n" ; if(act.child != null) out += "|" + "----"
+			 * + act.child._toString(lvl + 1); act = act.next; }while(act !=
+			 * this);
+			 */
+			return out;
 		}
 	}
 
@@ -102,18 +130,17 @@ public class FibHeap {
 			cut(nod, y);
 			cascadingCut(y);
 		}
-		if(nod.value < heap.value){
+		if (nod.value < heap.value) {
 			heap = nod;
 		}
 	}
 
-
 	private void cascadingCut(Node y) {
 		Node z = y.parent;
-		if(z != null){
-			if(!y.marked)
+		if (z != null) {
+			if (!y.marked)
 				y.marked = true;
-			else{
+			else {
 				cut(y, z);
 				cascadingCut(z);
 			}
@@ -121,19 +148,19 @@ public class FibHeap {
 	}
 
 	private void cut(Node nod, Node y) {
-		
+
 		nod.next.prev = nod.prev;
 		nod.prev.next = nod.next;
 		y.degree--;
-		
-		if(y.child == nod){
+
+		if (y.child == nod) {
 			y.child = nod.next;
 		}
-		
-		if(y.degree == 0){
+
+		if (y.degree == 0) {
 			y.child = null;
 		}
-		
+
 		nod.prev = heap;
 		nod.next = heap.next;
 		heap.next = nod;
@@ -198,7 +225,7 @@ public class FibHeap {
 					this.heap.next = nodes[i];
 					nodes[i].next.prev = nodes[i];
 
-					if (nodes[i].value < this.heap.value) {
+					if (nodes[i].value < heap.value) {
 						this.heap = nodes[i];
 					}
 				}
@@ -208,8 +235,9 @@ public class FibHeap {
 	}
 
 	private void link(Node n1, Node n2) {
-		n1.next.prev = n1.prev;
 		n1.prev.next = n1.next;
+		n1.next.prev = n1.prev;
+		
 		n1.parent = n2;
 		if (n2.child == null) {
 			n2.child = n1;
@@ -225,29 +253,16 @@ public class FibHeap {
 		n1.marked = false;
 	}
 
-	public String toString() {
-		return heap.toString();
-	}
-
 	public static void main(String[] args) {
 		FibHeap heap = new FibHeap();
-		for (int i = 3; i < 7; i++) {
+		for (int i = 0; i < 20; i++) {
 			heap.insert(new Node(i));
 		}
-		Node nod2 = new Node(2);
-		Node nod7 = new Node(7);
-
-		heap.insert(nod2);
-
-		
-
-		heap.insert(nod7);
 
 		heap.extactMin();
 
-		
-		heap.decreaseKey(nod7, 2);
-		
+		// heap.decreaseKey(nod7, 2);
+
 		System.out.println(heap.toString());
 	}
 
