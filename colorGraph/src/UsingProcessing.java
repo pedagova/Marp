@@ -13,6 +13,7 @@ public class UsingProcessing extends PApplet {
 	}
 
 	public void setup() {
+		//no test
 		noLoop();
 		
 	}
